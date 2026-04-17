@@ -1,0 +1,71 @@
+simulation:
+  name: Order Journey Simulation
+  description: End-to-end order fulfillment discrete event simulation
+  time_unit: minutes
+  warm_up_period: 60
+  run_length: 4320
+  replications: 10
+
+entities:
+  - name: Order
+    attributes:
+      - order_id
+      - order_type  # standard, express, bulk
+      - item_count
+      - priority
+      - created_at
+
+resources:
+  - name: OrderProcessor
+    capacity: 5
+    schedule: 24x7
+
+  - name: PickStation
+    capacity: 8
+    schedule: shift_8h
+
+  - name: PackStation
+    capacity: 6
+    schedule: shift_8h
+
+  - name: QAInspector
+    capacity: 2
+    schedule: shift_8h
+
+  - name: ShippingDock
+    capacity: 3
+    schedule: 24x7
+
+processes:
+  - name: OrderReceived
+    duration_dist: exponential(2)
+
+  - name: OrderValidation
+    resource: OrderProcessor
+    duration_dist: triangular(1, 3, 8)
+
+  - name: Picking
+    resource: PickStation
+    duration_dist: triangular(5, 10, 20)
+    depends_on_items: true
+
+  - name: Packing
+    resource: PackStation
+    duration_dist: triangular(3, 7, 15)
+
+  - name: QualityCheck
+    resource: QAInspector
+    duration_dist: uniform(2, 5)
+    probability: 0.3
+
+  - name: Shipping
+    resource: ShippingDock
+    duration_dist: triangular(2, 5, 10)
+
+kpis:
+  - order_cycle_time
+  - resource_utilization
+  - queue_wait_times
+  - throughput_per_hour
+  - on_time_delivery_rate
+  - bottleneck_identification
