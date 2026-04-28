@@ -1,0 +1,58 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.5.0/schema.json",
+  "name": "barMedianStage",
+  "position": {
+    "x": 19.612903225806452,
+    "y": 85.6774193548387,
+    "z": 1000,
+    "height": 180.64516129032259,
+    "width": 1240.7741935483871,
+    "tabOrder": 1000
+  },
+  "visual": {
+    "visualType": "clusteredBarChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "StageTransition"
+                    }
+                  },
+                  "Property": "Transition"
+                }
+              },
+              "queryRef": "StageTransition.Transition",
+              "nativeQueryRef": "Transition",
+              "active": true
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "wwi vw_order_rollup"
+                    }
+                  },
+                  "Property": "Median Stage Duration"
+                }
+              },
+              "queryRef": "wwi vw_order_rollup.Median Stage Duration",
+              "nativeQueryRef": "Median Stage Duration",
+              "active": true
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

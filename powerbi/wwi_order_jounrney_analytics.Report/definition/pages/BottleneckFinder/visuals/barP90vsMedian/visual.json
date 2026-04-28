@@ -1,0 +1,73 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.5.0/schema.json",
+  "name": "barP90vsMedian",
+  "position": {
+    "x": 20,
+    "y": 505,
+    "z": 1000,
+    "height": 205,
+    "width": 1240,
+    "tabOrder": 1000
+  },
+  "visual": {
+    "visualType": "clusteredBarChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "StageTransition"
+                    }
+                  },
+                  "Property": "Transition"
+                }
+              },
+              "queryRef": "StageTransition.Transition",
+              "nativeQueryRef": "Transition",
+              "active": true
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "wwi vw_order_rollup"
+                    }
+                  },
+                  "Property": "Median Stage Duration"
+                }
+              },
+              "queryRef": "wwi vw_order_rollup.Median Stage Duration",
+              "nativeQueryRef": "Median Stage Duration",
+              "active": true
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "wwi vw_order_rollup"
+                    }
+                  },
+                  "Property": "P90 Stage Duration"
+                }
+              },
+              "queryRef": "wwi vw_order_rollup.P90 Stage Duration",
+              "nativeQueryRef": "P90 Stage Duration",
+              "active": true
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

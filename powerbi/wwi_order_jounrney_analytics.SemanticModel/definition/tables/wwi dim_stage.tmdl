@@ -1,0 +1,60 @@
+/// Stage dimension with canonical process order. 4 stages: Order Created (10), Picked (20), Invoiced (30), Delivered (40). Groups: Pre-Ship, In-Transit.
+table 'wwi dim_stage'
+	lineageTag: 8b21d900-2940-49ac-a5e9-4ad8018c2b9c
+
+	column stage_key
+		dataType: int64
+		isNullable: false
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: c59d0d9c-80f2-4580-ac69-2e4454bda022
+		summarizeBy: none
+		sourceColumn: stage_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column stage_name
+		dataType: string
+		isNullable: false
+		sourceProviderType: varchar(50)
+		lineageTag: 9b078592-6f01-43a5-ab4a-2e2ca1bb003f
+		summarizeBy: none
+		sourceColumn: stage_name
+		sortByColumn: stage_sort
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column stage_sort
+		dataType: int64
+		isNullable: false
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: b81d6d1b-7b21-4094-9176-889d5227b9ec
+		summarizeBy: none
+		sourceColumn: stage_sort
+
+		annotation SummarizationSetBy = Automatic
+
+	column stage_group
+		dataType: string
+		isNullable: false
+		sourceProviderType: varchar(20)
+		lineageTag: c3be1c49-f281-47db-b45b-deac68a62921
+		summarizeBy: none
+		sourceColumn: stage_group
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'wwi dim_stage' = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database("DESKTOP-TNE86KL\SQLEXPRESS", "wwi_analytics"),
+				    wwi_dim_stage = Source{[Schema="wwi",Item="dim_stage"]}[Data]
+				in
+				    wwi_dim_stage
+
+	annotation PBI_ResultType = Table
+

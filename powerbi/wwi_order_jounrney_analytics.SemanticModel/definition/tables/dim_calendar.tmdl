@@ -1,0 +1,185 @@
+/// Date dimension table generated from event log date range. Includes fiscal year (Apr start), weekday flags, and sort columns. Marked as Date Table.
+table dim_calendar
+	lineageTag: 147822b2-cb09-4433-ae8b-49279df47aab
+	dataCategory: Time
+
+	column Date
+		isKey
+		formatString: General Date
+		lineageTag: 009d6bff-544d-4071-923d-3fc34a5a44c3
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Date]
+
+		annotation SummarizationSetBy = Automatic
+
+	column year
+		formatString: 0
+		lineageTag: b75716da-fd71-4422-8501-558150db037d
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [year]
+
+		annotation SummarizationSetBy = Automatic
+
+	column month_number
+		isHidden
+		formatString: 0
+		lineageTag: 8aec5580-8c9f-4272-84ab-2d0227c7f785
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [month_number]
+
+		annotation SummarizationSetBy = Automatic
+
+	column month
+		lineageTag: f3e7d165-9b7e-469c-86a3-b5855694b5a4
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [month]
+		sortByColumn: month_number
+
+		annotation SummarizationSetBy = Automatic
+
+	column month_year
+		lineageTag: c779791f-bb10-4af9-a586-f9e9aaa5df89
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [month_year]
+		sortByColumn: month_year_sort
+
+		annotation SummarizationSetBy = Automatic
+
+	column month_year_sort
+		isHidden
+		formatString: 0
+		lineageTag: a9b8d523-9161-431d-9f02-c84692f52ec3
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [month_year_sort]
+
+		annotation SummarizationSetBy = Automatic
+
+	column quarter
+		lineageTag: 79b8ac2a-d753-4039-8d7c-82fbe28b0eaf
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [quarter]
+		sortByColumn: month_number
+
+		annotation SummarizationSetBy = Automatic
+
+	column day
+		formatString: 0
+		lineageTag: 80e92d12-9b73-45c0-bc72-440457d263fb
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [day]
+
+		annotation SummarizationSetBy = Automatic
+
+	column day_of_week_number
+		isHidden
+		formatString: 0
+		lineageTag: 12d2af77-608b-4082-a52a-e4c1c4bed8d8
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [day_of_week_number]
+
+		annotation SummarizationSetBy = Automatic
+
+	column day_of_week
+		lineageTag: 042f1cc5-7354-4f48-a077-d3ec9d31c9ff
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [day_of_week]
+		sortByColumn: day_of_week_number
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_weekend
+		formatString: 0
+		lineageTag: 29914a7d-d0de-4fab-a0b7-c5f0c3b23699
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [is_weekend]
+
+		annotation SummarizationSetBy = Automatic
+
+	column week_of_year
+		formatString: 0
+		lineageTag: e9854d10-06e2-4b59-9e03-cbb8346d27b5
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [week_of_year]
+
+		annotation SummarizationSetBy = Automatic
+
+	column fiscal_year
+		formatString: 0
+		lineageTag: a43ddaae-cc0a-4b90-9b95-1bd251218223
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [fiscal_year]
+
+		annotation SummarizationSetBy = Automatic
+
+	column fiscal_period
+		formatString: 0
+		lineageTag: 78cbbd57-3670-43f3-9982-75d0a2d864e4
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [fiscal_period]
+
+		annotation SummarizationSetBy = Automatic
+
+	column fiscal_quarter
+		lineageTag: db9346d7-76e6-4b2e-94c1-a58bfe03813b
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [fiscal_quarter]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_calendar = calculated
+		mode: import
+		source = ```
+				
+				VAR MinDT =
+				    MINX ( ALL ( 'wwi vw_order_event' ), 'wwi vw_order_event'[EventTS] )
+				VAR MaxDT =
+				    MAXX ( ALL ( 'wwi vw_order_event' ), 'wwi vw_order_event'[EventTS] )
+				VAR MinDate = DATE ( YEAR ( MinDT ), MONTH ( MinDT ), DAY ( MinDT ) )
+				VAR MaxDate = DATE ( YEAR ( MaxDT ), MONTH ( MaxDT ), DAY ( MaxDT ) )
+				VAR FiscalStartMonth = 4
+				RETURN
+				ADDCOLUMNS (
+				    CALENDAR ( MinDate, MaxDate ),
+				
+				    "year", YEAR ( [Date] ),
+				    "month_number", MONTH ( [Date] ),
+				    "month", FORMAT ( [Date], "MMM" ),
+				    "month_year", FORMAT ( [Date], "MMM YYYY" ),
+				    "month_year_sort", YEAR ( [Date] ) * 100 + MONTH ( [Date] ),
+				
+				    "quarter", "Q" & FORMAT ( QUARTER ( [Date] ), "0" ),
+				
+				    "day", DAY ( [Date] ),
+				    "day_of_week_number", WEEKDAY ( [Date], 2 ),        -- Mon=1
+				    "day_of_week", FORMAT ( [Date], "ddd" ),
+				    "is_weekend", IF ( WEEKDAY ( [Date], 2 ) >= 6, 1, 0 ),
+				
+				    "week_of_year", WEEKNUM ( [Date], 2 ),
+				
+				    "fiscal_year",
+				        IF ( MONTH ( [Date] ) >= FiscalStartMonth, YEAR ( [Date] ) + 1, YEAR ( [Date] ) ),
+				    "fiscal_period",
+				        MOD ( MONTH ( [Date] ) - FiscalStartMonth + 12, 12 ) + 1,
+				    "fiscal_quarter",
+				        "FQ" & FORMAT ( INT ( MOD ( MONTH ( [Date] ) - FiscalStartMonth + 12, 12 ) / 3 ) + 1, "0" )
+				)
+				
+				```
+
+	annotation PBI_Id = 0e359a2c98024979927f9a976c97b8c4
+

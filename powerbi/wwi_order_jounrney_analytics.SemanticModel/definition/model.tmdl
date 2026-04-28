@@ -1,0 +1,22 @@
+model Model
+	culture: en-CA
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-CA
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+annotation PBI_QueryOrder = ["wwi dim_stage","wwi vw_order_event","wwi vw_order_rollup"]
+
+annotation PBI_ProTooling = ["MCP-PBIModeling","DevMode"]
+
+ref table 'wwi dim_stage'
+ref table 'wwi vw_order_event'
+ref table dim_calendar
+ref table 'wwi vw_order_rollup'
+ref table StageTransition
+
+ref cultureInfo en-CA
+

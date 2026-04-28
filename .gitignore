@@ -1,0 +1,35 @@
+# OS / Editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+.agents/
+.claude/
+.cursor/
+.windsurf/
+
+# Power BI — binary files
+*.pbix
+*.pbit
+*.pbiq
+*.pbitx
+*.tmp
+
+# Power BI — local/cache files inside PBIP
+**/.pbi/cache.abf
+**/.pbi/localSettings.json
+**/.pbi/editorSettings.json
+
+# TMDL version snapshots (local only, date-stamped backups)
+.tmdl_versions/
+
+# Logs / exports
+*.log
+*.bak
+*.zip
+*.7z
+
+# Python (if you add scripts later)
+__pycache__/
+*.pyc
+.venv/

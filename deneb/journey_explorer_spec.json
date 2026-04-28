@@ -1,0 +1,199 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Journey Explorer: normalized order timeline — how long did each stage take?",
+  "width": "container",
+  "height": "container",
+  "autosize": { "type": "fit", "contains": "padding" },
+  "padding": { "top": 16, "bottom": 16, "left": 12, "right": 24 },
+  "background": "transparent",
+
+  "config": {
+    "font": "Segoe UI",
+    "axis": {
+      "labelFont": "Segoe UI", "titleFont": "Segoe UI",
+      "labelFontSize": 11, "titleFontSize": 11,
+      "titleColor": "#5A6B7D", "labelColor": "#5A6B7D",
+      "gridColor": "#E8E4DF", "domainColor": "#CCCCCC",
+      "tickColor": "#CCCCCC", "tickSize": 4
+    },
+    "legend": {
+      "labelFont": "Segoe UI", "titleFont": "Segoe UI",
+      "labelFontSize": 10, "titleFontSize": 10,
+      "orient": "top-right", "direction": "vertical",
+      "symbolType": "circle", "symbolSize": 80,
+      "padding": 8, "cornerRadius": 4,
+      "fillColor": "#FFFFFF", "strokeColor": "#E8E4DF",
+      "labelOffset": 6
+    },
+    "view": { "stroke": null }
+  },
+
+  "data": { "name": "dataset" },
+
+  "transform": [
+    { "calculate": "toNumber(datum['EventTS'])", "as": "EventTSMs" },
+    {
+      "window": [{ "op": "min", "field": "EventTSMs", "as": "OrderStartMs" }],
+      "groupby": ["OrderID"]
+    },
+    {
+      "calculate": "(datum.EventTSMs - datum.OrderStartMs) / 86400000",
+      "as": "DaysFromStart"
+    },
+    {
+      "calculate": "!isValid(datum.IsOnTime) ? 'Open' : (datum.IsOnTime === 1 ? 'On Time' : 'Late')",
+      "as": "Status"
+    }
+  ],
+
+  "layer": [
+
+    {
+      "description": "Zone tint — Pre-Ship (teal) and In-Transit (coral) column bands",
+      "data": { "values": [
+        { "Stage": "Order Created", "Zone": "Pre-Ship" },
+        { "Stage": "Picked",        "Zone": "Pre-Ship" },
+        { "Stage": "Invoiced",      "Zone": "In-Transit" },
+        { "Stage": "Delivered",     "Zone": "In-Transit" }
+      ]},
+      "mark": { "type": "rect", "opacity": 0.05 },
+      "encoding": {
+        "x": {
+          "field": "Stage", "type": "nominal",
+          "sort": ["Order Created", "Picked", "Invoiced", "Delivered"]
+        },
+        "color": {
+          "field": "Zone", "type": "nominal",
+          "scale": { "domain": ["Pre-Ship", "In-Transit"], "range": ["#2E8B8B", "#E07A5F"] },
+          "legend": null
+        }
+      }
+    },
+
+    {
+      "description": "Zone labels — Pre-Ship / In-Transit",
+      "data": { "values": [
+        { "_label": "Pre-Ship",   "_x": "Picked" },
+        { "_label": "In-Transit", "_x": "Delivered" }
+      ]},
+      "mark": {
+        "type": "text", "align": "center", "baseline": "bottom",
+        "dy": -6, "fontSize": 9, "fontStyle": "italic", "opacity": 0.55
+      },
+      "encoding": {
+        "x": {
+          "field": "_x", "type": "nominal",
+          "sort": ["Order Created", "Picked", "Invoiced", "Delivered"]
+        },
+        "y": { "datum": 0, "type": "quantitative" },
+        "text": { "field": "_label", "type": "nominal" },
+        "color": {
+          "field": "_label", "type": "nominal",
+          "scale": { "domain": ["Pre-Ship", "In-Transit"], "range": ["#2E8B8B", "#E07A5F"] },
+          "legend": null
+        }
+      }
+    },
+
+    {
+      "description": "1-day reference rule (93.6% of WWI orders deliver in 1 day)",
+      "mark": {
+        "type": "rule",
+        "strokeDash": [6, 4], "strokeWidth": 1.5,
+        "color": "#D4A373", "opacity": 0.85
+      },
+      "encoding": {
+        "y": { "datum": 1.0, "type": "quantitative" }
+      }
+    },
+
+    {
+      "description": "1-day reference annotation",
+      "mark": {
+        "type": "text",
+        "align": "right", "baseline": "bottom",
+        "dx": -6, "dy": -3,
+        "fontSize": 9, "color": "#D4A373", "opacity": 0.9, "fontStyle": "italic"
+      },
+      "encoding": {
+        "x": { "datum": "Delivered", "type": "nominal" },
+        "y": { "datum": 1.0, "type": "quantitative" },
+        "text": { "value": "1-day mark (93% of orders)" }
+      }
+    },
+
+    {
+      "description": "Per-order journey lines — late orders are 3× more opaque",
+      "mark": { "type": "line", "strokeWidth": 1.8, "interpolate": "linear" },
+      "encoding": {
+        "x": {
+          "field": "Stage", "type": "nominal",
+          "sort": ["Order Created", "Picked", "Invoiced", "Delivered"],
+          "axis": {
+            "title": null,
+            "labelAngle": 0, "labelPadding": 12,
+            "labelFontSize": 12, "labelFontWeight": "bold",
+            "grid": false, "domain": true, "ticks": false
+          }
+        },
+        "y": {
+          "field": "DaysFromStart", "type": "quantitative",
+          "axis": {
+            "title": "Days from Order Start",
+            "grid": true, "gridDash": [3, 3],
+            "tickMinStep": 0.5, "titlePadding": 8
+          },
+          "scale": { "zero": true, "nice": true }
+        },
+        "detail": { "field": "OrderID", "type": "nominal" },
+        "color": {
+          "field": "Status", "type": "nominal",
+          "scale": {
+            "domain": ["On Time", "Late", "Open"],
+            "range": ["#2E8B8B", "#E07A5F", "#A0ADB8"]
+          },
+          "legend": { "title": "Delivery Status" }
+        },
+        "opacity": {
+          "condition": [
+            { "test": "datum.Status === 'Late'",    "value": 0.85 },
+            { "test": "datum.Status === 'On Time'", "value": 0.30 }
+          ],
+          "value": 0.25
+        }
+      }
+    },
+
+    {
+      "description": "Milestone dots — Delivered dot is larger (it's the outcome)",
+      "mark": { "type": "circle", "stroke": "#FFFFFF", "strokeWidth": 1.5, "opacity": 0.9 },
+      "encoding": {
+        "x": {
+          "field": "Stage", "type": "nominal",
+          "sort": ["Order Created", "Picked", "Invoiced", "Delivered"]
+        },
+        "y": { "field": "DaysFromStart", "type": "quantitative" },
+        "size": {
+          "condition": { "test": "datum.Stage === 'Delivered'", "value": 110 },
+          "value": 45
+        },
+        "color": {
+          "field": "Status", "type": "nominal",
+          "scale": {
+            "domain": ["On Time", "Late", "Open"],
+            "range": ["#2E8B8B", "#E07A5F", "#A0ADB8"]
+          },
+          "legend": null
+        },
+        "tooltip": [
+          { "field": "OrderID",       "type": "nominal",      "title": "Order ID" },
+          { "field": "CustomerName",  "type": "nominal",      "title": "Customer" },
+          { "field": "Stage",         "type": "nominal",      "title": "Stage" },
+          { "field": "DaysFromStart", "type": "quantitative", "title": "Days Elapsed", "format": ".2f" },
+          { "field": "Status",        "type": "nominal",      "title": "Delivery Status" }
+        ]
+      }
+    }
+
+  ]
+}

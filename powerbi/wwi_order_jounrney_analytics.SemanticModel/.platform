@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "wwi_order_jounrney_analytics"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "5cb1c9e4-1f7f-489b-ae12-271d9cb17f69"
+  }
+}

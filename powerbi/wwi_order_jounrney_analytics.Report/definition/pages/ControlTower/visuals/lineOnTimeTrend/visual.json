@@ -1,0 +1,58 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.5.0/schema.json",
+  "name": "lineOnTimeTrend",
+  "position": {
+    "x": 20,
+    "y": 200,
+    "z": 1000,
+    "height": 245,
+    "width": 736,
+    "tabOrder": 1000
+  },
+  "visual": {
+    "visualType": "lineChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_calendar"
+                    }
+                  },
+                  "Property": "month_year"
+                }
+              },
+              "queryRef": "dim_calendar.month_year",
+              "nativeQueryRef": "month_year",
+              "active": true
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "wwi vw_order_rollup"
+                    }
+                  },
+                  "Property": "On-Time %"
+                }
+              },
+              "queryRef": "wwi vw_order_rollup.On-Time %",
+              "nativeQueryRef": "On-Time %",
+              "active": true
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

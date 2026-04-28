@@ -1,0 +1,58 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.5.0/schema.json",
+  "name": "barOrdersByMethod",
+  "position": {
+    "x": 768,
+    "y": 200,
+    "z": 1000,
+    "height": 245,
+    "width": 492,
+    "tabOrder": 1000
+  },
+  "visual": {
+    "visualType": "clusteredBarChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "wwi vw_order_rollup"
+                    }
+                  },
+                  "Property": "CustomerCategoryName"
+                }
+              },
+              "queryRef": "wwi vw_order_rollup.CustomerCategoryName",
+              "nativeQueryRef": "CustomerCategoryName",
+              "active": true
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "wwi vw_order_rollup"
+                    }
+                  },
+                  "Property": "Total Orders"
+                }
+              },
+              "queryRef": "wwi vw_order_rollup.Total Orders",
+              "nativeQueryRef": "Total Orders",
+              "active": true
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

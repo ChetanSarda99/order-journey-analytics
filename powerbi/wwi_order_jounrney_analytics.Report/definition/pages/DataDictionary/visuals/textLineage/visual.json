@@ -1,0 +1,143 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.5.0/schema.json",
+  "name": "textLineage",
+  "position": {
+    "x": 631.741935483871,
+    "y": 429.41935483870969,
+    "z": 1000,
+    "height": 280.77419354838707,
+    "width": 628.64516129032256,
+    "tabOrder": 1000
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "Data Lineage",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": ""
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "WideWorldImporters (OLTP - SQL Server)",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "  Sales.Orders, Sales.Invoices, Sales.Customers, Application.Cities, Application.DeliveryMethods",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "        |",
+                    "textStyle": {
+                      "fontFamily": "Consolas"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "        v",
+                    "textStyle": {
+                      "fontFamily": "Consolas"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "wwi_analytics DB (SQL Server Express)",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "  vw_order_event (DirectQuery), vw_order_rollup (Import), dim_stage (Import)",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "        |",
+                    "textStyle": {
+                      "fontFamily": "Consolas"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "        v",
+                    "textStyle": {
+                      "fontFamily": "Consolas"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Power BI Semantic Model",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "  + dim_calendar (Import) + 33 DAX measures + Deneb custom visual",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

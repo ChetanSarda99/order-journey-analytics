@@ -1,0 +1,174 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.5.0/schema.json",
+  "name": "tableDetail",
+  "position": {
+    "x": 20,
+    "y": 388,
+    "z": 1000,
+    "height": 322,
+    "width": 1240,
+    "tabOrder": 1000
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "wwi vw_order_rollup"
+                    }
+                  },
+                  "Property": "OrderID"
+                }
+              },
+              "queryRef": "wwi vw_order_rollup.OrderID",
+              "nativeQueryRef": "OrderID",
+              "active": true
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "wwi vw_order_rollup"
+                    }
+                  },
+                  "Property": "CustomerName"
+                }
+              },
+              "queryRef": "wwi vw_order_rollup.CustomerName",
+              "nativeQueryRef": "CustomerName",
+              "active": true
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "wwi vw_order_rollup"
+                    }
+                  },
+                  "Property": "CreatedDate"
+                }
+              },
+              "queryRef": "wwi vw_order_rollup.CreatedDate",
+              "nativeQueryRef": "CreatedDate",
+              "active": true
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "wwi vw_order_rollup"
+                    }
+                  },
+                  "Property": "DeliveredDate"
+                }
+              },
+              "queryRef": "wwi vw_order_rollup.DeliveredDate",
+              "nativeQueryRef": "DeliveredDate",
+              "active": true
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "wwi vw_order_rollup"
+                    }
+                  },
+                  "Property": "ExpectedDeliveryDate"
+                }
+              },
+              "queryRef": "wwi vw_order_rollup.ExpectedDeliveryDate",
+              "nativeQueryRef": "ExpectedDeliveryDate",
+              "active": true
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "wwi vw_order_rollup"
+                    }
+                  },
+                  "Property": "CycleTimeDays"
+                }
+              },
+              "queryRef": "wwi vw_order_rollup.CycleTimeDays",
+              "nativeQueryRef": "CycleTimeDays",
+              "active": true
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "wwi vw_order_rollup"
+                    }
+                  },
+                  "Property": "DaysFromExpected"
+                }
+              },
+              "queryRef": "wwi vw_order_rollup.DaysFromExpected",
+              "nativeQueryRef": "DaysFromExpected",
+              "active": true
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "wwi vw_order_rollup"
+                    }
+                  },
+                  "Property": "FurthestStage"
+                }
+              },
+              "queryRef": "wwi vw_order_rollup.FurthestStage",
+              "nativeQueryRef": "FurthestStage",
+              "active": true
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "wwi vw_order_rollup"
+                    }
+                  },
+                  "Property": "CustomerCategoryName"
+                }
+              },
+              "queryRef": "wwi vw_order_rollup.CustomerCategoryName",
+              "nativeQueryRef": "CustomerCategoryName",
+              "active": true
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "wwi vw_order_rollup"
+                    }
+                  },
+                  "Property": "StateProvinceName"
+                }
+              },
+              "queryRef": "wwi vw_order_rollup.StateProvinceName",
+              "nativeQueryRef": "StateProvinceName",
+              "active": true
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

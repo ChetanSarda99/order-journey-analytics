@@ -1,0 +1,129 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.5.0/schema.json",
+  "name": "tableRedAlert",
+  "position": {
+    "x": 19.612903225806452,
+    "y": 457.29032258064518,
+    "z": 1000,
+    "height": 252.90322580645162,
+    "width": 912.516129032258,
+    "tabOrder": 1000
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "wwi vw_order_rollup"
+                    }
+                  },
+                  "Property": "StateProvinceName"
+                }
+              },
+              "queryRef": "wwi vw_order_rollup.StateProvinceName",
+              "nativeQueryRef": "StateProvinceName",
+              "active": true
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "wwi vw_order_rollup"
+                    }
+                  },
+                  "Property": "CustomerCategoryName"
+                }
+              },
+              "queryRef": "wwi vw_order_rollup.CustomerCategoryName",
+              "nativeQueryRef": "CustomerCategoryName",
+              "active": true
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "wwi vw_order_rollup"
+                    }
+                  },
+                  "Property": "Total Orders"
+                }
+              },
+              "queryRef": "wwi vw_order_rollup.Total Orders",
+              "nativeQueryRef": "Total Orders",
+              "active": true
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "wwi vw_order_rollup"
+                    }
+                  },
+                  "Property": "Late Orders"
+                }
+              },
+              "queryRef": "wwi vw_order_rollup.Late Orders",
+              "nativeQueryRef": "Late Orders",
+              "active": true
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "wwi vw_order_rollup"
+                    }
+                  },
+                  "Property": "SLA Breach %"
+                }
+              },
+              "queryRef": "wwi vw_order_rollup.SLA Breach %",
+              "nativeQueryRef": "SLA Breach %",
+              "active": true
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "wwi vw_order_rollup"
+                    }
+                  },
+                  "Property": "Median Cycle Days"
+                }
+              },
+              "queryRef": "wwi vw_order_rollup.Median Cycle Days",
+              "nativeQueryRef": "Median Cycle Days",
+              "active": true
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "wwi vw_order_rollup"
+                    }
+                  },
+                  "Property": "P90 Cycle Days"
+                }
+              },
+              "queryRef": "wwi vw_order_rollup.P90 Cycle Days",
+              "nativeQueryRef": "P90 Cycle Days",
+              "active": true
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

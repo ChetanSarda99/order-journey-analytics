@@ -1,0 +1,12 @@
+relationship dd09ca73-2727-3aef-bb57-4247994376c9
+	fromColumn: 'wwi vw_order_event'.Stage
+	toColumn: 'wwi dim_stage'.stage_name
+
+relationship f5a3b595-3aac-a531-740f-85a31fc39875
+	fromColumn: 'wwi vw_order_event'.EventTS
+	toColumn: dim_calendar.Date
+
+relationship 'wwi vw_order_rollup_CreatedDate_dim_calendar_Date'
+	fromColumn: 'wwi vw_order_rollup'.CreatedDate
+	toColumn: dim_calendar.Date
+

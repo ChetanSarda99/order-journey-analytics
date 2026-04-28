@@ -1,0 +1,137 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.5.0/schema.json",
+  "name": "textTechStack",
+  "position": {
+    "x": 19.612903225806452,
+    "y": 429.41935483870969,
+    "z": 1000,
+    "height": 280.77419354838707,
+    "width": 600.77419354838707,
+    "tabOrder": 1000
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "Business Rules & Tech Stack",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": ""
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "BUSINESS RULES",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "On-time = DeliveredDate <= ExpectedDeliveryDate (NULL if not delivered)",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Delivery method = customer's preferred (not invoice-level)",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Cycle time = DATEDIFF(HOUR)/24.0 for fractional days",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Multiple invoices per order: MIN() timestamp. Stage order: dim_stage.stage_sort",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": ""
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "TECH STACK",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "SQL Server Express (SSMS) | Power BI Desktop (PBIP/PBIR) | Deneb (Vega-Lite) | DAX | Power BI MCP | Claude Code",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": ""
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "GitHub: github.com/ChetanSarda99/order-journey-analytics",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

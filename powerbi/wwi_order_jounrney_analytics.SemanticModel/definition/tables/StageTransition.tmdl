@@ -1,0 +1,22 @@
+/// Disconnected table for stage duration visuals. Maps transition labels to SWITCH measures.
+table StageTransition
+	lineageTag: f50166d6-f2aa-4567-b225-1ff05c30602c
+
+	column Transition
+		lineageTag: c30e783d-d23e-4d38-9ba3-8b972ec65c68
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Transition]
+		sortByColumn: SortOrder
+
+	column SortOrder
+		isHidden
+		lineageTag: 84d54566-48f6-4f77-89d4-6293645f541b
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [SortOrder]
+
+	partition StageTransition = calculated
+		mode: import
+		source = DATATABLE("Transition", STRING, "SortOrder", INTEGER, {{"Created to Picked", 1}, {"Picked to Invoiced", 2}, {"Invoiced to Delivered", 3}})
+

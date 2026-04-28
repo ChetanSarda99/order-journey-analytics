@@ -1,0 +1,52 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.5.0/schema.json",
+  "name": "titleBox",
+  "position": {
+    "x": 19.612903225806452,
+    "y": 10.32258064516129,
+    "z": 11000,
+    "height": 65.032258064516128,
+    "width": 280.77419354838707,
+    "tabOrder": 11000
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "Root Cause Lab",
+                    "textStyle": {
+                      "fontFamily": "'Segoe UI'",
+                      "fontSize": "'20px'",
+                      "fontWeight": "'bold'",
+                      "color": "'#FFFFFF'"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "What drives late deliveries? Where should we intervene?",
+                    "textStyle": {
+                      "fontFamily": "'Segoe UI'",
+                      "fontSize": "'11px'",
+                      "fontStyle": "'italic'",
+                      "color": "'#A8C0D0'"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

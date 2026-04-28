@@ -1,0 +1,144 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.5.0/schema.json",
+  "name": "textMetrics",
+  "position": {
+    "x": 631.741935483871,
+    "y": 89.806451612903231,
+    "z": 1000,
+    "height": 320,
+    "width": 628.64516129032256,
+    "tabOrder": 1000
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "Metric Definitions",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": ""
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "CORE COUNTS",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Total Orders = DISTINCTCOUNT of OrderID | Delivered Orders = where IsDelivered=1 | Open Orders = Total - Delivered | Delivered % = Delivered / Total",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": ""
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "SLA METRICS",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "On-Time % = On-Time / Delivered (open orders excluded) | SLA Breach % = 1 - On-Time % | Late Orders = Delivered - On-Time",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": ""
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "CYCLE TIME",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Median Cycle Days = MEDIAN(CycleTimeDays) | P90 Cycle Days = PERCENTILE.INC(0.9) | Avg Cycle Days = AVERAGE",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": ""
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "PERIOD COMPARISON",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Orders MoM % = month-over-month change | On-Time MoM pp = MoM percentage point change | Cycle Time MoM = MoM median change",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

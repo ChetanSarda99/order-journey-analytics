@@ -1,0 +1,52 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.5.0/schema.json",
+  "name": "textTitle",
+  "position": {
+    "x": 20,
+    "y": 10,
+    "z": 11000,
+    "height": 70,
+    "width": 1240,
+    "tabOrder": 11000
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "Data Dictionary",
+                    "textStyle": {
+                      "fontFamily": "'Segoe UI'",
+                      "fontSize": "'22px'",
+                      "fontWeight": "'bold'",
+                      "color": "'#1B2A4A'"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Tables, columns, measures, business rules, and data lineage",
+                    "textStyle": {
+                      "fontFamily": "'Segoe UI'",
+                      "fontSize": "'11px'",
+                      "fontStyle": "'italic'",
+                      "color": "'#666666'"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

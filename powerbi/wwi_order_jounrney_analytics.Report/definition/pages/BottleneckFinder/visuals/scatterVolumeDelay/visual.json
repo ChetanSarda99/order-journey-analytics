@@ -1,0 +1,96 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.5.0/schema.json",
+  "name": "scatterVolumeDelay",
+  "position": {
+    "x": 20,
+    "y": 278,
+    "z": 1000,
+    "height": 215,
+    "width": 608,
+    "tabOrder": 1000
+  },
+  "visual": {
+    "visualType": "scatterChart",
+    "query": {
+      "queryState": {
+        "Details": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "wwi vw_order_rollup"
+                    }
+                  },
+                  "Property": "StateProvinceName"
+                }
+              },
+              "queryRef": "wwi vw_order_rollup.StateProvinceName",
+              "nativeQueryRef": "StateProvinceName",
+              "active": true
+            }
+          ]
+        },
+        "Size": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "wwi vw_order_rollup"
+                    }
+                  },
+                  "Property": "Late Orders"
+                }
+              },
+              "queryRef": "wwi vw_order_rollup.Late Orders",
+              "nativeQueryRef": "Late Orders",
+              "active": true
+            }
+          ]
+        },
+        "X": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "wwi vw_order_rollup"
+                    }
+                  },
+                  "Property": "Total Orders"
+                }
+              },
+              "queryRef": "wwi vw_order_rollup.Total Orders",
+              "nativeQueryRef": "Total Orders",
+              "active": true
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "wwi vw_order_rollup"
+                    }
+                  },
+                  "Property": "Median Cycle Days"
+                }
+              },
+              "queryRef": "wwi vw_order_rollup.Median Cycle Days",
+              "nativeQueryRef": "Median Cycle Days",
+              "active": true
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

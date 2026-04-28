@@ -1,0 +1,392 @@
+/// One row per order with stage timestamps and pre-calculated KPI fields. Import mode for fast MEDIAN/PERCENTILE calculations.
+table 'wwi vw_order_rollup'
+	lineageTag: a2bd8fd3-a696-4d4c-befd-f14b7d653cf0
+
+	/// Distinct count of all orders in current filter context.
+	measure 'Total Orders' = DISTINCTCOUNT('wwi vw_order_rollup'[OrderID])
+		formatString: #,0
+		displayFolder: Core
+		lineageTag: dce2a023-ce96-4c51-82e4-f7d323a8a690
+
+	/// Orders that reached the Delivered stage (ConfirmedDeliveryTime is not null).
+	measure 'Delivered Orders' = CALCULATE([Total Orders], 'wwi vw_order_rollup'[IsDelivered] = 1)
+		formatString: #,0
+		displayFolder: Core
+		lineageTag: 55bb3734-a5cf-4ef2-b3bf-cb5d390b5091
+
+	/// Orders not yet delivered. Represents current backlog.
+	measure 'Open Orders' = [Total Orders] - [Delivered Orders]
+		formatString: #,0
+		displayFolder: Core
+		lineageTag: 3097ec04-f428-4261-9a93-d8b8dd50965a
+
+	/// Share of orders that have been delivered.
+	measure 'Delivered %' = DIVIDE([Delivered Orders], [Total Orders])
+		formatString: 0.0%
+		displayFolder: Core
+		lineageTag: 5955aba2-7fd5-47b0-bfde-a8f3de9771fa
+
+	/// Delivered orders where DeliveredDate <= ExpectedDeliveryDate.
+	measure 'On-Time Orders' = CALCULATE([Delivered Orders], 'wwi vw_order_rollup'[IsOnTime] = 1)
+		formatString: #,0
+		displayFolder: SLA
+		lineageTag: 188639b7-1b55-4ace-9dcf-624fc5d1f8cb
+
+	/// Delivered orders that missed the expected delivery date.
+	measure 'Late Orders' = [Delivered Orders] - [On-Time Orders]
+		formatString: #,0
+		displayFolder: SLA
+		lineageTag: e9a5c897-5fd6-4e81-af1e-02a1334275cb
+
+	/// On-time delivery rate. Denominator is delivered orders only (excludes open orders).
+	measure 'On-Time %' = DIVIDE([On-Time Orders], [Delivered Orders])
+		formatString: 0.0%
+		displayFolder: SLA
+		lineageTag: cac79838-f368-438d-bc87-9ffba7ecb7e0
+
+	/// Share of delivered orders that were late. Inverse of On-Time %.
+	measure 'SLA Breach %' = 1 - [On-Time %]
+		formatString: 0.0%
+		displayFolder: SLA
+		lineageTag: 056177ab-cbfc-43d7-a34f-3b69d5df2ade
+
+	/// Median end-to-end cycle time in days (Order Created to Delivered). Only includes delivered orders.
+	measure 'Median Cycle Days' = MEDIAN('wwi vw_order_rollup'[CycleTimeDays])
+		formatString: 0.0
+		displayFolder: Cycle Time
+		lineageTag: ae3eb3ef-f420-4b6d-903f-f99c21becf7e
+
+	/// 90th percentile cycle time. 90% of delivered orders complete within this many days.
+	measure 'P90 Cycle Days' = PERCENTILE.INC('wwi vw_order_rollup'[CycleTimeDays], 0.90)
+		formatString: 0.0
+		displayFolder: Cycle Time
+		lineageTag: f0cf6a6c-2e59-46ba-8ad0-c07d02236d60
+
+	/// Mean end-to-end cycle time in days. Use Median for reporting; Avg is for reference.
+	measure 'Avg Cycle Days' = AVERAGE('wwi vw_order_rollup'[CycleTimeDays])
+		formatString: 0.0
+		displayFolder: Cycle Time
+		lineageTag: e9e0cdda-1956-459e-a05d-e89d852828ca
+
+	/// Median days from Order Created to Picked.
+	measure 'Median Created-to-Picked' = MEDIAN('wwi vw_order_rollup'[CreatedToPickedDays])
+		formatString: 0.0
+		displayFolder: Stage Duration
+		lineageTag: aca198cf-520b-4fa4-b3ed-8792d24c41f4
+
+	/// Median days from Picked to Invoiced.
+	measure 'Median Picked-to-Invoiced' = MEDIAN('wwi vw_order_rollup'[PickedToInvoicedDays])
+		formatString: 0.0
+		displayFolder: Stage Duration
+		lineageTag: 58ac4cd9-b190-4e29-bfe1-075a9ada4175
+
+	/// Median days from Invoiced to Delivered.
+	measure 'Median Invoiced-to-Delivered' = MEDIAN('wwi vw_order_rollup'[InvoicedToDeliveredDays])
+		formatString: 0.0
+		displayFolder: Stage Duration
+		lineageTag: 7f44b67c-8b7a-456b-90bc-37403ea110c1
+
+	/// 90th percentile days from Order Created to Picked.
+	measure 'P90 Created-to-Picked' = PERCENTILE.INC('wwi vw_order_rollup'[CreatedToPickedDays], 0.90)
+		formatString: 0.0
+		displayFolder: Stage Duration
+		lineageTag: 2daf15e8-1846-49f9-89cf-378b6c4406fa
+
+	/// 90th percentile days from Picked to Invoiced.
+	measure 'P90 Picked-to-Invoiced' = PERCENTILE.INC('wwi vw_order_rollup'[PickedToInvoicedDays], 0.90)
+		formatString: 0.0
+		displayFolder: Stage Duration
+		lineageTag: 1d5d0827-1c5b-4b62-a15d-4e154a9e438b
+
+	/// 90th percentile days from Invoiced to Delivered.
+	measure 'P90 Invoiced-to-Delivered' = PERCENTILE.INC('wwi vw_order_rollup'[InvoicedToDeliveredDays], 0.90)
+		formatString: 0.0
+		displayFolder: Stage Duration
+		lineageTag: 00b4dc02-9107-4eb7-8d4f-471af4f7e120
+
+	/// Total orders in the prior month. Uses dim_calendar relationship for time shift.
+	measure 'Total Orders PM' = CALCULATE([Total Orders], DATEADD(dim_calendar[Date], -1, MONTH))
+		formatString: #,0
+		isHidden
+		displayFolder: Period Comparison
+		lineageTag: 1a2dc784-23a7-409c-a760-924b604e1eda
+
+	/// On-time % in the prior month.
+	measure 'On-Time % PM' = CALCULATE([On-Time %], DATEADD(dim_calendar[Date], -1, MONTH))
+		formatString: 0.0%
+		isHidden
+		displayFolder: Period Comparison
+		lineageTag: ff681a79-28c3-428a-8b06-b9e0cbc7ce04
+
+	/// Median cycle time in the prior month.
+	measure 'Median Cycle PM' = CALCULATE([Median Cycle Days], DATEADD(dim_calendar[Date], -1, MONTH))
+		formatString: 0.0
+		isHidden
+		displayFolder: Period Comparison
+		lineageTag: c90167c5-f070-44a8-914d-fc18f516192c
+
+	/// Month-over-month change in total orders. Positive = growth.
+	measure 'Orders MoM %' =
+			VAR _current = [Total Orders]
+			VAR _prior = [Total Orders PM]
+			RETURN
+			    DIVIDE(_current - _prior, _prior)
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: Period Comparison
+		lineageTag: 0ff5b23c-5409-4a8b-beb6-703322bba2c9
+
+	/// Month-over-month change in on-time rate, in percentage points.
+	measure 'On-Time MoM pp' = [On-Time %] - [On-Time % PM]
+		formatString: +0.0 pp;-0.0 pp;0.0 pp
+		displayFolder: Period Comparison
+		lineageTag: 572199a5-85d8-4511-84cc-5f52b1a7c09a
+
+	/// Month-over-month change in median cycle time (days). Negative = improvement.
+	measure 'Cycle Time MoM' = [Median Cycle Days] - [Median Cycle PM]
+		formatString: +0.0;-0.0;0.0
+		displayFolder: Period Comparison
+		lineageTag: d58c208a-7bcb-45f9-a101-c2481f6814a0
+
+	/// Arrow + formatted MoM delta for Total Orders KPI card
+	measure 'Orders MoM Label' =
+			VAR v = [Orders MoM %]
+			RETURN IF(v >= 0, UNICHAR(9650) & " " & FORMAT(v, "+0.0%;-0.0%"), UNICHAR(9660) & " " & FORMAT(v, "+0.0%;-0.0%"))
+		formatString: 0
+		displayFolder: Period Comparison
+		lineageTag: a3210079-8606-4cf7-8fd6-b529a38e04c0
+
+	/// Arrow + formatted MoM delta for On-Time % KPI card
+	measure 'OnTime MoM Label' =
+			VAR v = [On-Time MoM pp]
+			RETURN IF(v >= 0, UNICHAR(9650) & " " & FORMAT(v, "+0.0") & " pp", UNICHAR(9660) & " " & FORMAT(v, "+0.0") & " pp")
+		formatString: 0
+		displayFolder: Period Comparison
+		lineageTag: 9f0f16f0-db2d-472f-ac9f-2e07a2643690
+
+	/// SWITCH measure returning median days for the selected stage transition
+	measure 'Median Stage Duration' =
+			SWITCH(
+			    SELECTEDVALUE(StageTransition[Transition]),
+			    "Created to Picked", [Median Created-to-Picked],
+			    "Picked to Invoiced", [Median Picked-to-Invoiced],
+			    "Invoiced to Delivered", [Median Invoiced-to-Delivered]
+			)
+		formatString: 0.0
+		displayFolder: Stage Duration
+		lineageTag: 6cd2401d-c02d-45e4-9571-b85468eba03d
+
+	/// SWITCH measure returning P90 days for the selected stage transition
+	measure 'P90 Stage Duration' =
+			SWITCH(
+			    SELECTEDVALUE(StageTransition[Transition]),
+			    "Created to Picked", [P90 Created-to-Picked],
+			    "Picked to Invoiced", [P90 Picked-to-Invoiced],
+			    "Invoiced to Delivered", [P90 Invoiced-to-Delivered]
+			)
+		formatString: 0.0
+		displayFolder: Stage Duration
+		lineageTag: 5d025520-7f41-45b1-bda5-35a47aa81e8c
+
+	/// Cumulative percentage of late orders for Pareto chart (Page 4)
+	measure 'Cumulative Late %' =
+			VAR CurrentLate = [Late Orders]
+			VAR AllRows =
+			    SUMMARIZE(
+			        ALLSELECTED('wwi vw_order_rollup'),
+			        'wwi vw_order_rollup'[CustomerCategoryName],
+			        "@Late", [Late Orders]
+			    )
+			VAR TotalLate = SUMX(AllRows, [@Late])
+			VAR RunningTotal =
+			    SUMX(
+			        FILTER(AllRows, [@Late] >= CurrentLate),
+			        [@Late]
+			    )
+			RETURN DIVIDE(RunningTotal, TotalLate)
+		formatString: 0.0%
+		displayFolder: SLA
+		lineageTag: 9630993f-0193-44d8-857f-c4f1e3a534d1
+
+	/// Conditional color for scatter plot: coral if SLA breach > 20%, teal otherwise
+	measure 'Scatter Color' = IF([SLA Breach %] > 0.20, "#E07A5F", "#2E8B8B")
+		formatString: 0
+		displayFolder: SLA
+		lineageTag: babffcb3-1b02-4ae1-a61d-7fbcb6e34b74
+
+	/// Shows the furthest stage for the selected order (Page 3 sidebar card)
+	measure 'Selected Order Stage' =
+			IF(HASONEVALUE('wwi vw_order_rollup'[OrderID]),
+			    SELECTEDVALUE('wwi vw_order_rollup'[FurthestStage]),
+			    "Select an order")
+		displayFolder: Journey
+		lineageTag: e01e2d46-2fe9-4516-8086-6775e779a38d
+
+	/// Shows the customer category for the selected order (Page 3 sidebar card)
+	measure 'Selected Order Category' =
+			IF(HASONEVALUE('wwi vw_order_rollup'[OrderID]),
+			    SELECTEDVALUE('wwi vw_order_rollup'[CustomerCategoryName]),
+			    "-")
+		displayFolder: Journey
+		lineageTag: e61c19d2-c08c-48e6-b085-0cb8f9388ed4
+
+	/// Shows on-time status for the selected order (Page 3 sidebar card)
+	measure 'Selected Order OnTime' =
+			IF(HASONEVALUE('wwi vw_order_rollup'[OrderID]),
+			    IF(SELECTEDVALUE('wwi vw_order_rollup'[IsOnTime]) = 1, "Yes", "No"),
+			    "-")
+		displayFolder: Journey
+		lineageTag: 01bb9241-3b80-4296-ab2f-69ecf4bdb05e
+
+	column OrderID
+		dataType: int64
+		isNullable: false
+		lineageTag: 589a7a09-8649-42c7-bb4c-7a9fb056da2f
+		summarizeBy: none
+		sourceColumn: OrderID
+
+	column CreatedDate
+		dataType: dateTime
+		lineageTag: 68d05312-c537-4f15-a0fb-34f5a09cecbf
+		summarizeBy: none
+		sourceColumn: CreatedDate
+
+	column PickedDate
+		dataType: dateTime
+		lineageTag: d18f0cec-5f84-4020-bd0c-48f106e7acc3
+		summarizeBy: none
+		sourceColumn: PickedDate
+
+	column InvoicedDate
+		dataType: dateTime
+		lineageTag: 0a570cba-eceb-4277-8616-e13144111fb0
+		summarizeBy: none
+		sourceColumn: InvoicedDate
+
+	column DeliveredDate
+		dataType: dateTime
+		lineageTag: f03e7ea2-344c-4b20-a32e-b606c6dd19bc
+		summarizeBy: none
+		sourceColumn: DeliveredDate
+
+	column ExpectedDeliveryDate
+		dataType: dateTime
+		isNullable: false
+		lineageTag: 6ad7ea13-df2f-4ad1-af9e-1c6b2e238ac6
+		summarizeBy: none
+		sourceColumn: ExpectedDeliveryDate
+
+	/// End-to-end cycle time in fractional days (hours/24)
+	column CycleTimeDays
+		dataType: double
+		lineageTag: 1781702f-1121-42f2-a194-f283cb2e4ad6
+		summarizeBy: none
+		sourceColumn: CycleTimeDays
+
+	/// Fractional days from Order Created to Picked
+	column CreatedToPickedDays
+		dataType: double
+		lineageTag: c21d45d7-3389-4b6d-8588-cbf6ba87e1d1
+		summarizeBy: none
+		sourceColumn: CreatedToPickedDays
+
+	/// Fractional days from Picked to Invoiced (floored at 0)
+	column PickedToInvoicedDays
+		dataType: double
+		lineageTag: 7fadc3a6-af8d-4fcd-807d-24ac7eab016f
+		summarizeBy: none
+		sourceColumn: PickedToInvoicedDays
+
+	/// Fractional days from Invoiced to Delivered
+	column InvoicedToDeliveredDays
+		dataType: double
+		lineageTag: 70b8b2a1-6e4c-43d3-95ed-d0ba793b2d24
+		summarizeBy: none
+		sourceColumn: InvoicedToDeliveredDays
+
+	column IsDelivered
+		dataType: int64
+		isNullable: false
+		lineageTag: b17a024f-437e-4ab9-a6fe-9c070cdb0b14
+		summarizeBy: none
+		sourceColumn: IsDelivered
+
+	/// 1=on-time, 0=late, NULL=not yet delivered
+	column IsOnTime
+		dataType: int64
+		lineageTag: 5b417bbe-8028-4c32-b7d9-e65a9b8c34d3
+		summarizeBy: none
+		sourceColumn: IsOnTime
+
+	column DaysFromExpected
+		dataType: int64
+		lineageTag: 0f2c0ff5-492f-4161-8f90-6eb90a5e10bc
+		summarizeBy: none
+		sourceColumn: DaysFromExpected
+
+	column FurthestStage
+		dataType: string
+		isNullable: false
+		lineageTag: ba208433-ff5c-4b5f-a439-216586d1f10e
+		summarizeBy: none
+		sourceColumn: FurthestStage
+
+	/// Order status: Delivered, In Progress, or Open
+	column OrderStatus
+		dataType: string
+		isNullable: false
+		lineageTag: 4e2f8a1b-9c3d-4567-8901-abcdef012345
+		summarizeBy: none
+		sourceColumn: OrderStatus
+
+	column CustomerName
+		dataType: string
+		lineageTag: 64edc8ae-f443-48f5-8a52-64323c994bb6
+		summarizeBy: none
+		sourceColumn: CustomerName
+
+	column CityName
+		dataType: string
+		lineageTag: 144de6ad-ddab-4ad1-b6c1-05fdea14aacb
+		summarizeBy: none
+		sourceColumn: CityName
+
+	column StateProvinceName
+		dataType: string
+		lineageTag: c013a4b3-1795-4fa2-8d50-49e40522ee9f
+		summarizeBy: none
+		sourceColumn: StateProvinceName
+
+	column CountryName
+		dataType: string
+		lineageTag: 600999e2-4209-4e37-a6da-c56735cc46ef
+		summarizeBy: none
+		sourceColumn: CountryName
+
+	column CustomerCategoryName
+		dataType: string
+		lineageTag: dcc024e4-fc78-441b-8033-9b2f03fedd64
+		summarizeBy: none
+		sourceColumn: CustomerCategoryName
+
+	column BuyingGroupName
+		dataType: string
+		lineageTag: b1c3e4f5-6a7b-8c9d-0e1f-2a3b4c5d6e7f
+		summarizeBy: none
+		sourceColumn: BuyingGroupName
+
+	column DeliveryMethodName
+		dataType: string
+		lineageTag: fda808c3-795b-4b8c-9163-e05be637c3ff
+		summarizeBy: none
+		sourceColumn: DeliveryMethodName
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'wwi vw_order_rollup' = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database("DESKTOP-TNE86KL\SQLEXPRESS", "wwi_analytics", [Query="SELECT * FROM wwi.vw_order_rollup"])
+				in
+				    Source
+

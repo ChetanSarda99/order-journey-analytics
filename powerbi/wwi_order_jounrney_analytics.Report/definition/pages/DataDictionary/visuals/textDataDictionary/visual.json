@@ -1,0 +1,114 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.5.0/schema.json",
+  "name": "textDataDictionary",
+  "position": {
+    "x": 19.612903225806452,
+    "y": 89.806451612903231,
+    "z": 1000,
+    "height": 320,
+    "width": 600.77419354838707,
+    "tabOrder": 1000
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "Data Dictionary",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": ""
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "SOURCE TABLES",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "wwi vw_order_rollup (Import) -- One row per order. Stage timestamps, cycle time (fractional days), SLA flags, geography, customer delivery method. Columns: OrderID, CreatedDate, PickedDate, InvoicedDate, DeliveredDate, CycleTimeDays, IsDelivered, IsOnTime (NULL=not delivered), OrderStatus, CustomerCategoryName",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": ""
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "wwi vw_order_event (DirectQuery) -- Event log. One row per order per stage. Columns: OrderID, EventTS, Stage, StageSort, StageGroup, CustomerName, CustomerCategoryName",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": ""
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "dim_calendar (Import) -- Standard date dimension linked to CreatedDate and EventTS",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": ""
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "wwi dim_stage (Import) -- Stage reference. 4 rows: Order Created, Picked, Invoiced, Delivered. StageTransition (DAX) -- Disconnected lookup for duration charts: 3 transitions",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

@@ -1,0 +1,132 @@
+/// Event log: one row per order per milestone (Order Created, Picked, Invoiced, Delivered). Source: wwi_analytics.wwi.vw_order_event via DirectQuery.
+table 'wwi vw_order_event'
+	lineageTag: f54202dc-aacc-4aec-bcbd-07e51c978189
+
+	/// Total event rows in the event log. Use for Journey Explorer page.
+	measure 'Event Count' = COUNTROWS('wwi vw_order_event')
+		formatString: #,0
+		displayFolder: Journey
+		lineageTag: 44b10481-4692-4da5-abda-60c1eba4b116
+
+	column OrderID
+		dataType: int64
+		isNullable: false
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: 61771054-3145-4d35-88fc-369e5380361e
+		summarizeBy: none
+		sourceColumn: OrderID
+
+		annotation SummarizationSetBy = User
+
+	column EventTS
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: datetime2
+		lineageTag: 0788a4d2-8316-4674-bf98-ab350fb7ecff
+		summarizeBy: none
+		sourceColumn: EventTS
+
+		annotation SummarizationSetBy = Automatic
+
+	column Stage
+		dataType: string
+		isNullable: false
+		sourceProviderType: varchar(50)
+		lineageTag: 0a42eab1-a6c9-4782-a44c-f35aae4a3934
+		summarizeBy: none
+		sourceColumn: Stage
+
+		annotation SummarizationSetBy = Automatic
+
+	column StageSort
+		dataType: int64
+		isHidden
+		isNullable: false
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: b35c5d0f-aa2d-4314-8b8a-e7ef6a0accec
+		summarizeBy: none
+		sourceColumn: StageSort
+
+		annotation SummarizationSetBy = User
+
+	column StageGroup
+		dataType: string
+		isNullable: false
+		sourceProviderType: varchar(20)
+		lineageTag: 2b374555-754b-4002-8f78-1dbdeba24fa7
+		summarizeBy: none
+		sourceColumn: StageGroup
+
+		annotation SummarizationSetBy = Automatic
+
+	column ExpectedDeliveryDate
+		dataType: dateTime
+		isNullable: false
+		formatString: Long Date
+		sourceProviderType: date
+		lineageTag: f871c124-6299-41b7-b573-88d8392adbfe
+		summarizeBy: none
+		sourceColumn: ExpectedDeliveryDate
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column CustomerName
+		dataType: string
+		sourceProviderType: nvarchar(100)
+		lineageTag: e71bd98e-29a4-4e27-89bc-7c0129e7b2ab
+		summarizeBy: none
+		sourceColumn: CustomerName
+
+		annotation SummarizationSetBy = Automatic
+
+	column CityName
+		dataType: string
+		sourceProviderType: nvarchar(50)
+		lineageTag: ea8537cb-b63d-4465-8bf1-7a177de51896
+		summarizeBy: none
+		sourceColumn: CityName
+
+		annotation SummarizationSetBy = Automatic
+
+	column StateProvinceName
+		dataType: string
+		sourceProviderType: nvarchar(50)
+		lineageTag: 30b9ac0d-842f-4a7a-9ec2-947752566a3a
+		summarizeBy: none
+		sourceColumn: StateProvinceName
+
+		annotation SummarizationSetBy = Automatic
+
+	column CountryName
+		dataType: string
+		sourceProviderType: nvarchar(60)
+		lineageTag: 23910768-3981-4b8b-ad9d-5fc810553527
+		summarizeBy: none
+		sourceColumn: CountryName
+
+		annotation SummarizationSetBy = Automatic
+
+	column CustomerCategoryName
+		dataType: string
+		sourceProviderType: nvarchar(50)
+		lineageTag: b4a69446-2afc-49d6-aa32-f4cfe151a592
+		summarizeBy: none
+		sourceColumn: CustomerCategoryName
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'wwi vw_order_event' = m
+		mode: directQuery
+		source =
+				let
+				    Source = Sql.Database("DESKTOP-TNE86KL\SQLEXPRESS", "wwi_analytics"),
+				    wwi_vw_order_event = Source{[Schema="wwi",Item="vw_order_event"]}[Data]
+				in
+				    wwi_vw_order_event
+
+	annotation PBI_ResultType = Table
+
